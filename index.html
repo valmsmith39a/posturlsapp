@@ -3,7 +3,9 @@
 
 <!-- Assing Angular Module -->
 <html ng-app="postURLs">
+
 <head>
+
     <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
@@ -17,7 +19,6 @@
         body                    { padding-top:50px;
                                   background-color: lightgreen;
                                 }
-
         #postButton             { background-color: yellow;
                                   color:red;
                                 }
@@ -27,22 +28,23 @@
         #headerTextBox          { background-color:yellow;
                                   color: red;
                                 }
-
     </style>
 
-    <!-- Spells-->
+    <!-- CDNs and external files-->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
     <script src="core.js"></script>
 
 </head>
+
 <!-- Set controller and get all postURLs -->
 <body ng-controller="mainController">
+
     <div class="container">
 
         <!-- Header and postURLs count -->
         <div id= "headerTextBox" class="jumbotron text-center">
-            <h1 id="header">InTheKnow<span class="label label-info">{{ postURLs.length }}</span></h1>
+            <h1 id="header">InTheKnow</h1>
         </div>
 
         <!-- Form to create postURLs -->
@@ -50,43 +52,44 @@
             <div class="col-sm-8 col-sm-offset-2 text-center">
                 <form>
                     <div class="form-group">
-
                         <!-- Bind this value to formData.text in Angular -->
                         <input type="text" class="form-control input-lg text-center" placeholder="https://www.washingtonpost.com" ng-model="formData.text">
                     </div>
-
                     <!-- createPostURLs() creates new postURLs -->
                     <button type="submit" id="postButton" class="btn btn-primary btn-lg" ng-click="createPostURL()">Post</button>
                 </form>
             </div>
         </div>
 
-
-
-
-
-
-
         <!-- postURLs LIST -->
         <div id="postURL-list" class="row">
             <div class="col-sm-4 col-sm-offset-4">
-
                 <!-- Loop over the postURLs in $scope.postURLs -->
+
+                <!-- TESTING -->
                 <div class="checkbox" ng-repeat="postURL in postURLs">
-                    <label>
-                      <input type="checkbox" ng-click="deletePostURL(postURL._id)">
-                      <!-- Modified -->
-                      <a href="{{ postURL.text }}">{{ postURL.text }}</a>
+                   <!-- <div class="checkbox" ng-repeat="item in testLinks"> -->
+                     <label>
+                       <a href="{{ postURL.text }}">{{ postURL.title }} </a>
+                     </label>
+                  <!-- </div> -->
+               </div>
 
-                      <!-- <input type="checkbox" ng-click="deletePostURL(postURL._id)"> {{ postURL.text }} -->
-                    </label>
-                </div>
-            </div>
+              <!--
+              <div class="checkbox" ng-repeat="postURL in postURLs">
+                  <div class="checkbox" ng-repeat="item in testLinks"></div>
+                  <label>
+                    <input type="checkbox" ng-click="deletePostURL(postURL._id)"></input>
+                    <a href="{{ postURL.text }}">{{ item }}</a>
+                  </label>
+              </div>
+             -->
+
+           </div>
         </div>
-
-
 
     </div>
 
 </body>
+
 </html>

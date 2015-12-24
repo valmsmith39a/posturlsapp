@@ -21,8 +21,10 @@
     app.use(methodOverride());
 
     // --- Define model ---
+    // TESTING
     var PostURL = mongoose.model('PostURL', {
-        text : String
+        text : String,
+        title: String
     });
 
     // --- Routes and API ---
@@ -37,6 +39,7 @@
                 res.send(err)
 
             console.dir("GETTING");
+            console.dir(weblinks);
             res.json(weblinks); // return all posts in JSON format
         });
 
@@ -46,8 +49,10 @@
     app.post('/api/posturls', function(req, res) {
 
         // Create a post, information comes from AJAX request from Angular
+        // TESTING
         PostURL.create({
             text : req.body.text,
+            title:"test title",
             done : false
         }, function(err, weblink) {
             if (err)
@@ -60,9 +65,7 @@
                 console.dir("POSTING");
                 res.json(weblinks);
             });
-
         });
-
     });
 
     // Delete a post
