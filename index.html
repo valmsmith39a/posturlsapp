@@ -19,21 +19,25 @@
         body                    { padding-top:50px;
                                   background-color: lightgreen;
                                 }
-        #postButton             { background-color: yellow;
+        #postButton             { background-color:yellow;
                                   color:red;
                                 }
-        #header                 { background-color: yellow;
+        #header                 { background-color:yellow;
                                   color:red;
+                                  font-size:60px;
                                 }
         #headerTextBox          { background-color:yellow;
                                   color: red;
                                 }
     </style>
 
-    <!-- CDNs and external files-->
+    <!-- CDNs -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+
+    <!-- External files -->
     <script src="core.js"></script>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
 
 </head>
 
@@ -65,12 +69,11 @@
         <div id="postURL-list" class="row">
             <div class="col-sm-4 col-sm-offset-4">
                 <!-- Loop over the postURLs in $scope.postURLs -->
-
-                <!-- TESTING -->
                 <div class="checkbox" ng-repeat="postURL in postURLs">
                    <!-- <div class="checkbox" ng-repeat="item in testLinks"> -->
                      <label>
-                       <a href="{{ postURL.text }}">{{ postURL.title }} </a>
+                       <input type="checkbox" ng-click="deletePostURL(postURL._id)"></input>
+                       <a href="{{ postURL.text }}">{{ postURL.title }}</a>
                      </label>
                   <!-- </div> -->
                </div>

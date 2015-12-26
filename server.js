@@ -7,10 +7,13 @@
     var morgan = require('morgan');                    // Log requests to the console (express4)
     var bodyParser = require('body-parser');           // Pull information from HTML POST (express4)
     var methodOverride = require('method-override');   // Simulate DELETE and PUT (express4)
+    var request = require('request');                  // To get HTML code of website
+    var cheerio = require('cheerio');                  // Provides jQuery functionality
 
     // --- Configuration ---
     mongoose.connect('mongodb://localhost/test');
     //mongoose.connect('mongodb://node:nodeuser@mongo.onmodulus.net:27017/uwO3mypu');  // Connect to mongoDB database on modulus.io
+
     var __dirname = '/Users/georgewee/documents/posturlsapp';
 
     app.use(express.static(__dirname));                             // Set the static files location
@@ -21,52 +24,54 @@
     app.use(methodOverride());
 
     // --- Define model ---
-    // TESTING
     var PostURL = mongoose.model('PostURL', {
-        text : String,
-        title: String
+        text : String
+      , title: String
     });
 
     // --- Routes and API ---
     // Get all posts
     app.get('/api/posturls', function(req, res) {
-
         // Use mongoose to get all posts in the database
         PostURL.find(function(err, weblinks) {
-
             // If there is an error retrieving, send the error. nothing after res.send(err) will execute
             if (err)
-                res.send(err)
-
-            console.dir("GETTING");
-            console.dir(weblinks);
+                res.send(err);
             res.json(weblinks); // return all posts in JSON format
-        });
-
-    });
+        });  //  PostURL.find()...
+    });  //  app.get()...
 
     // Create post and send back all posts after creation
     app.post('/api/posturls', function(req, res) {
+      var title ="";
+      url = req.body.text;
 
-        // Create a post, information comes from AJAX request from Angular
-        // TESTING
-        PostURL.create({
-            text : req.body.text,
-            title:"test title",
-            done : false
-        }, function(err, weblink) {
-            if (err)
-                res.send(err);
+      request(url, function(error, response, html){
+         if(!error){
+            // Utilize cheerio library on the returned html which gives jQuery functionality
+            var $ = cheerio.load(html);
+            // Define variables to capture
+            $('title').filter(function() {
+               title = $(this).text();
 
-            PostURL.find(function(err, weblinks) {
-                if (err)
-                    res.send(err)
-                console.dir(weblinks);
-                console.dir("POSTING");
-                res.json(weblinks);
-            });
-        });
-    });
+               // Create a post, information comes from AJAX request from Angular
+               PostURL.create({
+                   text : req.body.text
+                 , title:title
+                 , done : false
+               }, function(err, weblink) {
+                   if (err)
+                       res.send(err);
+                   PostURL.find(function(err, weblinks) {
+                       if (err)
+                           res.send(err)
+                       res.json(weblinks);
+                   });  //  PostURL.find()...
+               });  //  PostURL.create()...
+            });  // $('title').filter()...
+         }  //  if(!error)...
+      });  //  request()...
+    });  //  app.post()...
 
     // Delete a post
     app.delete('/api/posturls/:posturl_id', function(req, res) {
@@ -80,9 +85,9 @@
                 if (err)
                     res.send(err)
                 res.json(weblinks);
-            });
-        });
-    });
+            });  //  PostURL.find()...
+        });  //  PostURL.remove()...
+    });  //  app.delete()...
 
     // --- Application ---
     app.get('*', function(req, res) {
